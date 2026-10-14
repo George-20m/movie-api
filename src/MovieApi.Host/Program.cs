@@ -1,5 +1,6 @@
 using MovieApi.Core;
 using MovieApi.Data;
+using MovieApi.Host.Rpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddSingleton<IMovieRepository>(sp =>
         sp.GetRequiredService<IConfiguration>().GetConnectionString("Oracle")
         ?? throw new InvalidOperationException("ConnectionStrings:Oracle is not set.")));
 builder.Services.AddSingleton<MovieCatalog>();
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -15,6 +18,9 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.MapGrpcService<MovieGrpcService>();
+app.MapGrpcReflectionService();
 
 app.MapGet("/health", async (MovieCatalog catalog, CancellationToken ct) =>
     await catalog.IsDatabaseUpAsync(ct)

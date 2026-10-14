@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "MovieApi.Host.Rpc";
+
+package movies.v1;
+
+service MovieLookup {
+  rpc GetMovie (GetMovieRequest) returns (MovieReply);
+  rpc SearchMovies (SearchMoviesRequest) returns (SearchMoviesReply);
+}
+
+message GetMovieRequest {
+  int64 id = 1;
+}
+
+message SearchMoviesRequest {
+  string title_prefix = 1;
+  int32 limit = 2;
+}
+
+message MovieReply {
+  int64 id = 1;
+  string title = 2;
+  string overview = 3;
+  string release_date = 4;
+  double popularity = 5;
+  double vote_average = 6;
+  int64 vote_count = 7;
+}
+
+message SearchMoviesReply {
+  repeated MovieReply movies = 1;
+}
