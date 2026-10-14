@@ -1,6 +1,8 @@
 using MovieApi.Core;
 using MovieApi.Data;
 using MovieApi.Host.Rpc;
+using MovieApi.Host.Soap;
+using SoapCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddSingleton<IMovieRepository>(sp =>
         sp.GetRequiredService<IConfiguration>().GetConnectionString("Oracle")
         ?? throw new InvalidOperationException("ConnectionStrings:Oracle is not set.")));
 builder.Services.AddSingleton<MovieCatalog>();
+builder.Services.AddScoped<IMovieSoapService, MovieSoapService>();
+builder.Services.AddSoapCore();
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
 builder.Services.AddEndpointsApiExplorer();
@@ -18,6 +22,12 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+((IEndpointRouteBuilder)app).UseSoapEndpoint<IMovieSoapService>(opt =>
+{
+    opt.Path = "/soap/movies";
+    opt.SoapSerializer = SoapSerializer.DataContractSerializer;
+});
 
 app.MapGrpcService<MovieGrpcService>();
 app.MapGrpcReflectionService();
