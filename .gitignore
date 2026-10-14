@@ -1,0 +1,22 @@
+# secrets
+.env
+*.env
+# .NET
+bin/
+obj/
+*.user
+.vs/
+.idea/
+.vscode/
+TestResults/
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# data
+*.csv
+*.zip
+data/
+# OS
+.DS_Store
