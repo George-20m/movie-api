@@ -46,6 +46,8 @@ app.MapGet("/api/movies", async (string? title, int? limit, MovieCatalog catalog
     Results.Ok(await catalog.SearchAsync(title, limit, ct)))
     .WithTags("Movies");
 
+app.MapGet("/api/version", () => Results.Ok(new { version = "1.0.1" })).WithTags("Health");
+
 app.Run();
 
 public partial class Program { }
