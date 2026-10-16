@@ -48,6 +48,8 @@ app.MapGet("/api/movies", async (string? title, int? limit, MovieCatalog catalog
 
 app.MapGet("/api/version", () => Results.Ok(new { version = "1.0.1" })).WithTags("Health");
 
+app.MapGet("/api/version", () => Results.Ok(new { version = "1.0.1" })).WithTags("Health");
+
 app.Run();
 
 public partial class Program { }
